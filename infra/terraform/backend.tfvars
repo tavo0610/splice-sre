@@ -1,0 +1,5 @@
+bucket = "terraform-state-projects"
+key   = "tfstate.json"
+region = "us-west-2"
+profile = "personal"
+workspace_key_prefix = "environment"
