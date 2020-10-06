@@ -17,3 +17,5 @@ variable "private_azs" {
 variable "private_cidr_blocks" {
   type = list(string)
 }
+
+variable "environment_tag" {}

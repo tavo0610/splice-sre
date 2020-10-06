@@ -1,5 +1,5 @@
 locals {
-  public_subnets = zipmap(var.public_azs, var.public_cidr_blocks)
+  public_subnets  = zipmap(var.public_azs, var.public_cidr_blocks)
   private_subnets = zipmap(var.private_azs, var.private_cidr_blocks)
 }
 
@@ -9,7 +9,8 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    "Name" = "${var.project}"
+    "Name"      = "${var.project}"
+    Environment = var.environment_tag
   }
 }
 
@@ -20,7 +21,8 @@ resource "aws_subnet" "public" {
   cidr_block        = each.value
 
   tags = {
-    Name = "Public Subnet AZ-${each.key}"
+    Name        = "Public Subnet AZ-${each.key}"
+    Environment = var.environment_tag
   }
 }
 
@@ -31,6 +33,28 @@ resource "aws_subnet" "private" {
   cidr_block        = each.value
 
   tags = {
-    Name = "Private Subnet AZ-${each.key}"
+    Name        = "Private Subnet AZ-${each.key}"
+    Environment = var.environment_tag
+  }
+}
+
+resource "aws_eip" "nat_gw_elastic_ip" {
+  vpc = true
+
+  tags = {
+    Name        = "${var.project}-nat-eip"
+    Environment = var.environment_tag
+  }
+}
+
+
+resource "aws_nat_gateway" "gw" {
+  for_each          = local.private_subnets
+  allocation_id = aws_eip.nat_gw_elastic_ip.id
+  subnet_id     = aws_subnet.private[each.key].id
+
+  tags = {
+    Name = "Nat GW"
+    Environment = var.environment_tag
   }
 }
