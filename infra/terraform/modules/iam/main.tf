@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "EKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/EKSClusterPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.role.name
 }
 
@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSServicePolicy" {
 }
 
 resource "aws_iam_role" "eks_nodes" {
-  name = "eks-node-group-tuto"
+  name = "eks-node-group"
 
   assume_role_policy = <<POLICY
 {
