@@ -47,14 +47,21 @@ resource "aws_eip" "nat_gw_elastic_ip" {
   }
 }
 
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "IGW"
+  }
+}
+
 
 resource "aws_nat_gateway" "gw" {
-  for_each          = local.private_subnets
   allocation_id = aws_eip.nat_gw_elastic_ip.id
-  subnet_id     = aws_subnet.private[each.key].id
+  subnet_id     = aws_subnet.public["${var.nat_gw_subnet}"].id
 
   tags = {
-    Name = "Nat GW"
+    Name        = "Nat GW"
     Environment = var.environment_tag
   }
+  depends_on = [aws_internet_gateway.gw]
 }

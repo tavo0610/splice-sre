@@ -19,3 +19,5 @@ variable "private_cidr_blocks" {
 }
 
 variable "environment_tag" {}
+
+variable "nat_gw_subnet" {}
