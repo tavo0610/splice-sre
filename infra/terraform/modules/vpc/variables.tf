@@ -1,6 +1,6 @@
 variable "project" {}
 
-variable "cidr_block_vpc"{}
+variable "cidr_block_vpc" {}
 
 variable "public_azs" {
   type = list(string)
@@ -21,3 +21,7 @@ variable "private_cidr_blocks" {
 variable "environment_tag" {}
 
 variable "nat_gw_subnet" {}
+
+variable "name_sg" {}
+
+variable "sg_eks_inbound" {}

@@ -65,3 +65,22 @@ resource "aws_nat_gateway" "gw" {
   }
   depends_on = [aws_internet_gateway.gw]
 }
+
+
+
+resource "aws_security_group" "eks" {
+  name_prefix = var.name_sg
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+
+    cidr_blocks = var.sg_eks_inbound
+  }
+
+  tags = {
+    Name = var.name_sg
+  }
+}
